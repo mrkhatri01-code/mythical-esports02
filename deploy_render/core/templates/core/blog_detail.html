@@ -1,0 +1,29 @@
+{% extends 'core/base.html' %}
+{% block title %}{{ post.title }} | Blog | Mythical Esports{% endblock %}
+{% block meta %}
+    <meta name="description" content="{{ post.content|truncatewords:30|striptags }}">
+    <meta property="og:title" content="{{ post.title }}">
+    <meta property="og:description" content="{{ post.content|truncatewords:30|striptags }}">
+    {% if post.banner %}
+    <meta property="og:image" content="{{ post.banner.url }}">
+    {% endif %}
+{% endblock %}
+{% block content %}
+<nav class="text-sm text-gray-500 mb-4">
+    <a href="{% url 'home' %}" class="hover:text-orange-500">Home</a> /
+    <a href="{% url 'blog_list' %}" class="hover:text-orange-500">Blog</a> /
+    <span>{{ post.title }}</span>
+</nav>
+<article class="bg-white rounded-2xl shadow-lg p-8 max-w-2xl mx-auto">
+    <header>
+        <h1 class="text-4xl font-extrabold mb-2">{{ post.title }}</h1>
+        <div class="text-gray-500 text-sm mb-4">{{ post.created_at|date:"F d, Y" }}</div>
+        {% if post.banner %}
+        <img src="{{ post.banner.url }}" alt="{{ post.title }}" class="w-full h-64 object-cover rounded-xl mb-6" />
+        {% endif %}
+    </header>
+    <section class="prose max-w-none">
+        {{ post.content|linebreaks }}
+    </section>
+</article>
+{% endblock %} 

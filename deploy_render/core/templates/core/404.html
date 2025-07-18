@@ -1,0 +1,22 @@
+{% extends 'core/base.html' %}
+{% block title %}Page Not Found | Mythical Esports{% endblock %}
+{% block content %}
+<div class="flex flex-col items-center justify-center min-h-[60vh] text-center animate-fade-in">
+    <div class="bg-white/70 backdrop-blur rounded-2xl shadow-lg p-8 flex flex-col items-center">
+        <img src="{% static 'core/logo.png' %}" alt="Logo" class="h-24 w-24 mb-6 rounded-full shadow-lg animate-bounce">
+        <h1 class="text-7xl font-extrabold bg-gradient-to-r from-orange-500 via-red-500 to-yellow-400 text-transparent bg-clip-text mb-4 drop-shadow">404</h1>
+        <h2 class="text-2xl font-bold mb-2 text-gray-800">Page Not Found</h2>
+        <p class="text-gray-500 mb-6">Oops! The page you are looking for doesn’t exist or has been moved.</p>
+        <a href="{% url 'home' %}" class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-gradient-to-r from-orange-500 to-yellow-400 text-white font-bold shadow hover:from-orange-600 hover:to-yellow-500 transition">
+            <i class="fas fa-home"></i> Go Home
+        </a>
+    </div>
+</div>
+<style>
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(30px);}
+  to { opacity: 1; transform: none;}
+}
+.animate-fade-in { animation: fade-in 0.7s cubic-bezier(.4,0,.2,1) both; }
+</style>
+{% endblock %} 

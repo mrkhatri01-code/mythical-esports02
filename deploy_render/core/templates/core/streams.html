@@ -1,0 +1,28 @@
+{% extends 'core/base.html' %}
+{% block title %}Streams | Mythical Esports{% endblock %}
+{% block content %}
+<h1 class="text-3xl font-extrabold mb-6">Live Streams & Highlights</h1>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    {% for stream in streams %}
+    <div class="bg-white/80 backdrop-blur rounded-2xl shadow-lg p-4 flex flex-col items-center transition hover:scale-105 hover:shadow-2xl group">
+        <div class="w-full flex justify-center mb-4">
+        {% if stream.platform == 'twitch' %}
+            <iframe src="https://player.twitch.tv/?channel={{ stream.url|cut:'https://www.twitch.tv/' }}&parent={{ request.get_host }}" frameborder="0" allowfullscreen="true" scrolling="no" height="315" width="560" class="rounded-xl"></iframe>
+        {% elif stream.platform == 'youtube' %}
+            {% if 'watch?v=' in stream.url %}
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ stream.url|cut:'https://www.youtube.com/watch?v=' }}" frameborder="0" allowfullscreen class="rounded-xl"></iframe>
+            {% elif 'channel/' in stream.url %}
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/live_stream?channel={{ stream.url|cut:'https://www.youtube.com/channel/' }}" frameborder="0" allowfullscreen class="rounded-xl"></iframe>
+            {% endif %}
+        {% endif %}
+        </div>
+        <div class="text-center">
+            <h2 class="text-xl font-bold mb-2">{{ stream.name }}</h2>
+            <a href="{{ stream.url }}" target="_blank" class="text-orange-500 hover:underline">Go to Channel</a>
+        </div>
+    </div>
+    {% empty %}
+    <p class="text-gray-500 col-span-full">No streams available at the moment.</p>
+    {% endfor %}
+</div>
+{% endblock %} 

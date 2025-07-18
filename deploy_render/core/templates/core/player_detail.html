@@ -1,0 +1,37 @@
+{% extends 'core/base.html' %}
+{% block title %}{{ player.name }} | Player | Mythical Esports{% endblock %}
+{% block meta %}
+    <meta name="description" content="{{ player.bio|truncatewords:30|striptags }}">
+    <meta property="og:title" content="{{ player.name }}">
+    <meta property="og:description" content="{{ player.bio|truncatewords:30|striptags }}">
+    {% if player.photo %}
+    <meta property="og:image" content="{{ player.photo.url }}">
+    {% endif %}
+{% endblock %}
+{% block content %}
+<nav class="text-sm text-gray-500 mb-4">
+    <a href="{% url 'home' %}" class="hover:text-orange-500">Home</a> /
+    <a href="{% url 'players' %}" class="hover:text-orange-500">Players</a> /
+    <span>{{ player.name }}</span>
+</nav>
+<article class="bg-white rounded-2xl shadow-lg p-8 max-w-2xl mx-auto">
+    <header class="flex flex-col items-center">
+        {% if player.photo %}
+        <img src="{{ player.photo.url }}" alt="{{ player.name }}" class="w-64 h-64 object-contain rounded-xl shadow mb-6 bg-gray-100" />
+        {% endif %}
+        <h1 class="text-4xl font-extrabold mb-2">{{ player.name }}</h1>
+        {% if player.team %}
+        <div class="flex items-center mb-4">
+            {% if player.team.logo %}
+            <img src="{{ player.team.logo.url }}" alt="{{ player.team.name }}" class="h-8 w-8 object-contain rounded-full mr-2 bg-white" />
+            {% endif %}
+            <span class="text-lg font-semibold text-orange-700">{{ player.team.name }}</span>
+        </div>
+        {% endif %}
+    </header>
+    <section class="prose max-w-none mt-4">
+        <h2 class="text-xl font-bold mb-2">Bio</h2>
+        <p>{{ player.bio|linebreaks }}</p>
+    </section>
+</article>
+{% endblock %} 

@@ -1,0 +1,59 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}Contact | Mythical Esports{% endblock %}
+{% block content %}
+<div class="flex flex-col md:flex-row items-center justify-center gap-10 animate-fade-in-up">
+  <div class="hidden md:flex flex-col items-center justify-center flex-1">
+    <img src="{% static 'core/logo.png' %}" alt="Mythical Esports Logo" class="w-40 h-40 mb-6 drop-shadow-2xl animate-fade-in-up" />
+    <div class="flex gap-4 mt-2">
+      {% for link in social_links %}
+        <a href="{{ link.url }}" target="_blank" rel="noopener" class="text-gray-400 hover:text-orange-500 text-3xl transition">
+          <i class="{{ link.icon }}"></i>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="flex-1 w-full max-w-xl">
+    <h1 class="text-4xl md:text-5xl font-extrabold mb-6 text-center text-orange-600 drop-shadow-sm animate-fade-in-up relative">
+      <span class="relative z-10">Contact Us</span>
+      <span class="absolute left-1/2 -translate-x-1/2 bottom-0 w-2/3 h-2 bg-gradient-to-r from-orange-400 via-yellow-300 to-orange-400 rounded-full blur-sm opacity-30 z-0"></span>
+    </h1>
+    {% if success %}
+      <div class="flex items-center gap-2 bg-green-100 text-green-800 p-4 rounded-lg mb-4 shadow animate-fade-in-up">
+        <i class="fa fa-check-circle text-green-500 text-2xl"></i>
+        <span>Thank you for contacting us! We'll get back to you soon.</span>
+      </div>
+    {% endif %}
+    <form method="post" class="glass border border-orange-100/40 shadow-xl p-8 w-full rounded-3xl space-y-7 animate-fade-in-up">
+      {% csrf_token %}
+      <div class="mb-4">
+        <label for="id_name" class="block font-bold text-gray-800 mb-1">Name <span class="text-red-500">*</span></label>
+        <div class="flex items-center gap-3">
+          <span class="text-2xl text-orange-400"><i class="fa fa-user"></i></span>
+          <input type="text" name="name" id="id_name" value="{{ form.name.value|default:'' }}" required class="block w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300 bg-white/70" />
+        </div>
+        {% if form.name.errors %}<p class="text-red-500 text-xs mt-1 flex items-center gap-1"><i class="fa fa-exclamation-circle"></i> {{ form.name.errors.0 }}</p>{% endif %}
+      </div>
+      <div class="mb-4">
+        <label for="id_email" class="block font-bold text-gray-800 mb-1">Email <span class="text-red-500">*</span></label>
+        <div class="flex items-center gap-3">
+          <span class="text-2xl text-orange-400"><i class="fa fa-envelope"></i></span>
+          <input type="email" name="email" id="id_email" value="{{ form.email.value|default:'' }}" required class="block w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300 bg-white/70" />
+        </div>
+        {% if form.email.errors %}<p class="text-red-500 text-xs mt-1 flex items-center gap-1"><i class="fa fa-exclamation-circle"></i> {{ form.email.errors.0 }}</p>{% endif %}
+      </div>
+      <div class="mb-6">
+        <label for="id_message" class="block font-bold text-gray-800 mb-1">Message <span class="text-red-500">*</span></label>
+        <div class="flex items-start gap-3">
+          <span class="text-2xl text-orange-400 pt-2"><i class="fa fa-comment-dots"></i></span>
+          <textarea name="message" id="id_message" rows="5" required class="block w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300 bg-white/70 resize-none">{{ form.message.value|default:'' }}</textarea>
+        </div>
+        {% if form.message.errors %}<p class="text-red-500 text-xs mt-1 flex items-center gap-1"><i class="fa fa-exclamation-circle"></i> {{ form.message.errors.0 }}</p>{% endif %}
+      </div>
+      <button type="submit" class="w-full py-3 rounded-xl font-bold text-lg text-white bg-gradient-to-r from-orange-500 to-yellow-400 shadow-lg hover:from-orange-600 hover:to-yellow-500 transition flex items-center justify-center gap-2">
+        <i class="fa fa-paper-plane animate-pulse"></i> Send
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock %} 

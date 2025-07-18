@@ -1,0 +1,138 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load humanize %}
+{% block title %}Home | Mythical Esports{% endblock %}
+{% block content %}
+<div class="relative min-h-[420px] flex flex-col md:flex-row items-center justify-between rounded-3xl overflow-hidden bg-gradient-to-br from-orange-600 via-orange-400 to-yellow-400 shadow-xl p-4 sm:p-8 md:p-12 lg:p-16 mb-10 gap-8 md:gap-0">
+    <!-- Watermark Logo Background -->
+    <img src="{% static 'core/logo.png' %}" alt="Mythical Esports Watermark" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] max-w-2xl opacity-10 pointer-events-none select-none z-0 hidden md:block" style="filter: blur(1px);" />
+    <div class="flex-1 z-10 flex flex-col justify-center items-start md:items-start text-white max-w-full md:max-w-xl w-full">
+        <span class="inline-block bg-white/20 text-orange-100 font-semibold px-4 py-1 rounded-full mb-4 text-xs sm:text-xs shadow">🔥 Premier Esports Platform</span>
+        <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-4 drop-shadow-lg tracking-tight bg-gradient-to-r from-yellow-300 via-orange-400 to-orange-600 bg-clip-text text-transparent" style="text-shadow: 0 2px 16px rgba(255,140,0,0.18);">
+            Mythical <span class="text-yellow-300">Esports</span>
+        </h1>
+        <p class="text-base sm:text-lg md:text-xl lg:text-2xl font-medium mb-7 text-white/90 drop-shadow max-w-2xl">Experience the future of competitive gaming. Follow epic tournaments, legendary teams, and breaking news.</p>
+        <div class="flex flex-col sm:flex-row gap-4 mb-10 w-full max-w-md">
+            <a href="{% url 'tournaments' %}" class="px-7 py-3 text-base sm:text-lg font-bold rounded-xl shadow-lg bg-white/20 backdrop-blur-md border border-orange-200/40 text-orange-900 hover:bg-orange-500/80 hover:text-white transition glass focus:outline-none focus:ring-2 focus:ring-yellow-300">Explore Tournaments <i class="fa fa-arrow-right ml-2"></i></a>
+            <a href="{% url 'streams' %}" class="px-7 py-3 text-base sm:text-lg font-bold rounded-xl border-2 border-white/70 text-white bg-white/10 hover:bg-white/30 transition shadow-lg focus:outline-none focus:ring-2 focus:ring-orange-400">Watch Streams & Videos</a>
+        </div>
+        <!-- Stats Row: Responsive and Centered on All Devices -->
+        <div class="flex flex-col sm:flex-row gap-6 sm:gap-12 mt-4 sm:mt-6 text-white/90 w-full max-w-2xl mx-auto items-center justify-center">
+            <div class="flex flex-col items-center flex-1 min-w-[90px]">
+                <span class="text-2xl sm:text-3xl font-extrabold">{{ tournaments_count }}</span>
+                <span class="text-xs sm:text-base font-medium">Tournaments</span>
+            </div>
+            <div class="flex flex-col items-center flex-1 min-w-[90px]">
+                <span class="text-2xl sm:text-3xl font-extrabold">{{ teams_count }}</span>
+                <span class="text-xs sm:text-base font-medium">Teams</span>
+            </div>
+            <div class="flex flex-col items-center flex-1 min-w-[120px]">
+                <span class="text-2xl sm:text-3xl font-extrabold">NPR {{ prize_pool_sum|default:"0"|intcomma }}</span>
+                <span class="text-xs sm:text-base font-medium">Prize Pool</span>
+            </div>
+        </div>
+    </div>
+    <!-- Foreground Logo (right/center) -->
+    <div class="flex-1 flex justify-center items-center z-10 mb-6 md:mb-0 w-full">
+        <div class="relative flex justify-center items-center w-full">
+            <img src="{% static 'core/logo.png' %}" alt="Mythical Esports Logo" class="w-40 h-40 sm:w-56 sm:h-56 md:w-72 md:h-72 lg:w-96 lg:h-96 object-contain drop-shadow-2xl animate-fade-in-up opacity-95 shadow-[0_0_60px_10px_rgba(255,180,60,0.25)]" />
+            <span class="absolute -bottom-4 left-1/2 -translate-x-1/2 w-2/3 h-3 bg-gradient-to-r from-orange-400 via-yellow-300 to-orange-400 rounded-full blur-md opacity-40 z-0"></span>
+        </div>
+    </div>
+    <div class="absolute inset-0 bg-gradient-to-br from-orange-700/80 via-orange-400/60 to-yellow-300/60 pointer-events-none" style="z-index:1;"></div>
+</div>
+
+{% if next_tournament %}
+<div class="mb-6 p-4 bg-white rounded shadow">
+    <h2 class="text-xl font-semibold">Next Tournament: {{ next_tournament.name }}</h2>
+    <p>Game: {{ next_tournament.game }} | Prize: {{ next_tournament.prize_pool }} | Date: {{ next_tournament.date }}</p>
+    <img src="{{ next_tournament.banner.url }}" alt="Banner" class="my-2 w-full max-w-md rounded">
+    <div id="countdown" class="text-2xl font-bold"></div>
+    <script>
+        const eventDate = new Date("{{ next_tournament.date|date:'c' }}").getTime();
+        const countdown = document.getElementById('countdown');
+        setInterval(function() {
+            const now = new Date().getTime();
+            const distance = eventDate - now;
+            if (distance < 0) {
+                countdown.innerHTML = "Tournament Started!";
+                return;
+            }
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            countdown.innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+        }, 1000);
+    </script>
+</div>
+{% endif %}
+
+<div class="my-6">
+    <h2 class="text-lg font-semibold mb-2">Subscribe to our Newsletter</h2>
+    <form action="{% url 'subscribe' %}" method="post" class="flex max-w-md">
+        {% csrf_token %}
+        <input type="email" name="email" placeholder="Your email" required class="rounded-l px-2 py-1 border w-full">
+        <button type="submit" class="bg-blue-500 text-white px-4 py-1 rounded-r">Subscribe</button>
+    </form>
+</div>
+
+{% if sponsors %}
+<div class="my-6">
+    <h2 class="text-lg font-semibold mb-2">Our Sponsors</h2>
+    <div class="flex flex-wrap gap-4">
+        {% for sponsor in sponsors %}
+            <a href="{{ sponsor.link }}" target="_blank">
+                <img src="{{ sponsor.logo.url }}" alt="{{ sponsor.name }}" class="h-16 object-contain bg-white rounded shadow p-2">
+            </a>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+{% if testimonials %}
+<div class="my-6">
+    <h2 class="text-lg font-semibold mb-2">Testimonials</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {% for testimonial in testimonials %}
+        <div class="bg-white p-4 rounded shadow flex items-center">
+            {% if testimonial.photo %}
+            <img src="{{ testimonial.photo.url }}" alt="{{ testimonial.name }}" class="h-12 w-12 rounded-full mr-4">
+            {% endif %}
+            <div>
+                <p class="italic">"{{ testimonial.content }}"</p>
+                <p class="font-semibold mt-2">- {{ testimonial.name }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+{% if featured_streams %}
+<div class="my-6">
+    <h2 class="text-lg font-semibold mb-4">Live Streams</h2>
+    <div class="flex flex-col md:flex-row flex-wrap gap-8 justify-center items-center">
+        {% for stream in featured_streams %}
+            <div class="bg-white/80 backdrop-blur rounded-2xl shadow-lg p-4 flex flex-col items-center w-full md:w-[620px]">
+                <div class="w-full flex justify-center">
+                {% if stream.platform == 'twitch' %}
+                    <iframe src="https://player.twitch.tv/?channel={{ stream.url|cut:'https://www.twitch.tv/' }}&parent={{ request.get_host }}" frameborder="0" allowfullscreen="true" scrolling="no" height="378" width="620" class="rounded-xl"></iframe>
+                {% elif stream.platform == 'youtube' %}
+                    {% if 'watch?v=' in stream.url %}
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ stream.url|cut:'https://www.youtube.com/watch?v=' }}" frameborder="0" allowfullscreen class="rounded-xl"></iframe>
+                    {% elif 'channel/' in stream.url %}
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/live_stream?channel={{ stream.url|cut:'https://www.youtube.com/channel/' }}" frameborder="0" allowfullscreen class="rounded-xl"></iframe>
+                    {% endif %}
+                {% endif %}
+                </div>
+                <div class="text-center">
+                    <h2 class="text-xl font-bold mb-2">{{ stream.name }}</h2>
+                    <a href="{{ stream.url }}" target="_blank" class="text-orange-500 hover:underline">Go to Channel</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+{% endblock %} 

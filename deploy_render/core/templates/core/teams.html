@@ -1,0 +1,20 @@
+{% extends 'core/base.html' %}
+{% block title %}Teams | Mythical Esports{% endblock %}
+{% block content %}
+<h1 class="text-3xl font-extrabold mb-6">Teams</h1>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    {% for team in teams %}
+    <div class="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col transition hover:scale-105 hover:shadow-2xl">
+        <div class="p-6 flex flex-col flex-1">
+            <h2 class="text-xl font-bold mb-2">{{ team.name }}</h2>
+            {% if team.logo %}
+            <img src="{{ team.logo.url }}" alt="{{ team.name }}" class="w-full h-48 object-contain rounded-xl bg-gray-100 mb-2" />
+            {% endif %}
+            <p class="text-gray-700 mb-4 flex-1">{{ team.description|truncatewords:20 }}</p>
+            <!-- Placeholder for future team detail page -->
+            <a href="{% url 'team_detail' pk=team.pk %}" class="inline-block mt-auto px-4 py-2 rounded-lg font-bold text-lg text-white bg-gradient-to-r from-orange-500 to-yellow-400 shadow hover:from-orange-600 hover:to-yellow-500 transition text-center w-full">View Profile</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %} 

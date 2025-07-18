@@ -1,0 +1,16 @@
+name: esports_portfolio
+channels:
+  - defaults
+dependencies:
+  - python=3.10
+  - pip
+  - pip:
+      - django
+      - djangorestframework
+      - psycopg2-binary
+      - gunicorn
+      - whitenoise
+      - Pillow
+      - pytest
+      - pytest-django
+      - django-environ 
